@@ -57,8 +57,13 @@ if (operand === "movie-this") {
                 
                
       axios.get("https://rest.bandsintown.com/artists/" + name + "/events?app_id=codingbootcamp").then(
-      function(response) {
-            console.log(response.data);
-        }
-        );    
-      }  
+        function (response) {
+          for (var i = 0; i < response.data.length; i++) {
+              console.log(name + " is coming to " +
+                  response.data[i].venue.name + " in " +
+                  response.data[i].venue.city + ", " +
+                  response.data[i].venue.region + " on " +
+                  moment(response.data[i].datetime).format("dddd, MMMM Do YYYY"));
+          }
+      });
+}
