@@ -94,4 +94,25 @@ else if (operand === "spotify-this-song") {
   });
 };
 
+if (operand === "do-what-it-says") {
+  name = ""
+
+     
+  fs.readFile("random.txt", "utf8", function(error, data) {
+      if (error) {
+        return console.log(error);
+      }
+      console.log(data)
+      
+      
+      spotify.search({ type: 'track', query: data }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+       
+      console.log(data); 
+    });
+  });
+}
+
  
