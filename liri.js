@@ -4,23 +4,12 @@ var Spotify = require("node-spotify-api");
 var moment = require("moment");
 var fs = require("fs");
 var inputString = process.argv;
-var operand = inputString[2];
-var name = inputString[3];
 
+
+function search (operand, name) {
 if (operand === "movie-this") {
 
-    name=""
-
-    for (var i = 3; i < inputString.length; i++) {
-
-        if (i > 3 && i < inputString.length) {
-          name = name + " " + inputString[i];
-        }
-        else {
-          name += inputString[i];
-      
-        }
-      }
+    
 
     // We then run the request with axios module on a URL with a JSON
     axios.get("http://www.omdbapi.com/?t=" + name + "&y=&plot=short&apikey=trilogy").then(
@@ -40,18 +29,9 @@ if (operand === "movie-this") {
 
    else if (operand === "concert-this") {
 
-     name = ""
+     
 
-     for (var i = 3; i < inputString.length; i++) {
-
-        if (i > 3 && i < inputString.length) {
-          name = name + " " + inputString[i];
-        }
-        else {
-          name += inputString[i];
-      
-        }
-      }
+     
                 
                
       axios.get("https://rest.bandsintown.com/artists/" + name + "/events?app_id=codingbootcamp").then(
@@ -68,19 +48,10 @@ if (operand === "movie-this") {
 
 else if (operand === "spotify-this-song") {
 
-  name = ""
+  
 
-  for (var i = 3; i < inputString.length; i++) {
-
-     if (i > 3 && i < inputString.length) {
-       name = name + " " + inputString[i];
-     }
-     else {
-       name += inputString[i];
-   
-     }
-   }
-   
+  
+   console.log(name);
    var spotify = new Spotify(
     keys.spotify
  );
@@ -89,10 +60,13 @@ else if (operand === "spotify-this-song") {
     if (err) {
       return console.log('Error occurred: ' + err);
     }
-   
-  console.log(data); 
-  });
-};
+    
+    console.log("artist:" + data.tracks.items[0].artists[0].name);
+    console.log("Song title: " + data.tracks.items[0].name);
+    console.log("Preview the song at: " + data.tracks.items[0].href);
+    console.log("This song is on the album: " + data.tracks.items[0].album.name);
+});
+}
 
 if (operand === "do-what-it-says") {
   name = ""
@@ -103,16 +77,26 @@ if (operand === "do-what-it-says") {
         return console.log(error);
       }
       console.log(data)
-      
-      
-      spotify.search({ type: 'track', query: data }, function(err, data) {
-        if (err) {
-          return console.log('Error occurred: ' + err);
-        }
-       
-      console.log(data); 
-    });
+      // search(data.split);
+      var splitString = data.split(",");
+      console.log(splitString);
+     var command  = splitString[0];
+      var name =  splitString[1];
+      search(command,name);
   });
 }
+}
+var operand = inputString[2];
+var name = "";
+for (var i = 3; i < inputString.length; i++) {
 
+  if (i > 3 && i < inputString.length) {
+    name = name + " " + inputString[i];
+  }
+  else {
+    name += inputString[i];
+
+  }
+}
+search(operand,name);
  
