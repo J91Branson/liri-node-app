@@ -1,10 +1,8 @@
-
+var keys = require("./keys.js");
 var axios = require("axios");
-var spotify = require("node-spotify-api");
-var dotenv = require("dotenv");
-var inquirer = require("inquirer");
+var Spotify = require("node-spotify-api");
 var moment = require("moment");
-
+var fs = require("fs");
 var inputString = process.argv;
 var operand = inputString[2];
 var name = inputString[3];
@@ -30,7 +28,7 @@ if (operand === "movie-this") {
            // Then we print out the imdbRating
            console.log("The title is: " + response.data.Title);
            console.log(name + " was released in " + response.data.Year);
-           console.log("IMDB rated " + name + "a " + response.data.imdbRating);
+           console.log("IMDB rated " + name + " a " + response.data.imdbRating);
            console.log("Rotten Tomatoes rated " + name + " a " + response.data.Metascore);
            console.log(name + " was made in " + response.data.Country);
            console.log(name + " is in " + response.data.Language);
@@ -67,3 +65,33 @@ if (operand === "movie-this") {
           }
       });
 }
+
+else if (operand === "spotify-this-song") {
+
+  name = ""
+
+  for (var i = 3; i < inputString.length; i++) {
+
+     if (i > 3 && i < inputString.length) {
+       name = name + " " + inputString[i];
+     }
+     else {
+       name += inputString[i];
+   
+     }
+   }
+   
+   var spotify = new Spotify(
+    keys.spotify
+ );
+   
+  spotify.search({ type: 'track', query: name }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
+    }
+   
+  console.log(data); 
+  });
+};
+
+ 
